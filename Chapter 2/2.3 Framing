@@ -1,0 +1,196 @@
+# 🌐 Chapter 2 — Framing
+
+## 📘 Summary
+After learning how bits are transmitted through encoding, the next step is **framing** — grouping those bits into structured data units called **frames**.  
+
+Framing enables the receiver to detect **where a frame starts and ends**, ensuring that data is received in complete, meaningful chunks rather than as an endless bitstream.  
+Without it, the receiver couldn’t distinguish one message from another.
+
+---
+
+## 🔑 Key Points
+
+### 🧩 1. What Is Framing?
+**Framing** organizes raw bit streams into data units called **frames**.
+
+Each frame typically contains:
+- **Header:** control info (address, type, etc.)
+- **Payload:** the actual data
+- **Trailer:** error-check fields (like CRC)
+
+**Adaptors (Network Interfaces):**
+- **Sender:** converts frame → bits → signals  
+- **Receiver:** reassembles bits → frame
+
+> Framing ensures receivers can identify data boundaries in a continuous stream of bits.
+
+---
+
+### 🧱 2. Framing Approaches
+Three main methods handle framing in different technologies:
+
+---
+
+#### (a) Byte-Oriented Protocols (e.g., PPP)
+Treat the frame as a **sequence of bytes (characters)** rather than raw bits.  
+Used in older systems (BISYNC, DDCMP) and modern ones like **PPP (Point-to-Point Protocol)**.
+
+##### Two Main Techniques
+
+**1. Sentinel (Character-Delimited)**
+- Uses special bytes to mark frame boundaries:
+  - `SYN` – Synchronization  
+  - `STX` – Start of Text  
+  - `ETX` – End of Text
+- **Problem:** What if the data includes these characters?
+- **Solution:** *Character Stuffing*  
+  - Insert a **DLE (Data Link Escape)** before special bytes.  
+  - Double any real DLEs (`DLE DLE`) in the data.  
+  - Similar to escaping special characters in code (`\"`).
+
+---
+
+**2. Length-Based**
+- Header specifies frame length (in bytes).
+- **Risk:** If the length field is corrupted, receiver misinterprets frame boundaries → *framing error.*
+
+---
+
+##### PPP (Point-to-Point Protocol)
+Standard byte-oriented protocol used for IP over serial links.
+
+| Field | Description |
+|--------|--------------|
+| **Flag (01111110)** | Start/end sentinel |
+| **Address & Control** | Typically default values |
+| **Protocol** | Identifies upper-layer protocol (e.g., IP) |
+| **Payload** | Data (default 1500 bytes; negotiable) |
+| **Checksum (CRC)** | Error detection (2 or 4 bytes) |
+
+**Negotiation:**  
+PPP uses **LCP (Link Control Protocol)** to negotiate:
+- Frame size  
+- Field usage  
+- Link parameters  
+- Establish and manage sessions  
+
+---
+
+#### (b) Bit-Oriented Protocols (e.g., HDLC)
+Treat the frame as a **bit sequence** rather than bytes.  
+Example: **HDLC (High-Level Data Link Control)** — derived from IBM’s SDLC.
+
+##### Frame Delimiting
+- Frames start and end with a special bit pattern:  
+  **`01111110`**  
+- The same pattern is used during idle times for synchronization.
+
+##### The Problem
+The same pattern could appear in data.
+
+##### The Solution — Bit Stuffing
+- Sender inserts a `0` after every **five consecutive 1s** in the data.
+- Receiver removes the extra `0`s:
+  - If five 1s are followed by `0` → stuffed bit → remove it.  
+  - If followed by another `1` → end flag detected (`01111110`).  
+  - If `01111111` → invalid pattern → error.
+
+**Result:** frame boundaries stay recognizable, even within a continuous stream.  
+Frame length varies slightly depending on how many bits are stuffed.
+
+---
+
+#### (c) Clock-Based Framing (e.g., SONET)
+Used by **SONET (Synchronous Optical Network)** — a **timing-based** framing approach for optical networks.
+
+##### Core Idea
+- Frames have **fixed sizes** and are transmitted **at precise time intervals**.
+- No delimiters or bit stuffing needed.
+
+##### SONET STS-1 Frame
+- **Frame rate:** 51.84 Mbps  
+- **Frame size:** 9 rows × 90 bytes = **810 bytes**  
+- **Overhead:** 3 bytes per row  
+- **Payload:** remaining bytes  
+
+**Frame Start:** identified by a **synchronization pattern** in the first 2 bytes, repeated every frame (125 μs).  
+Once the receiver detects this regularly, it locks synchronization.
+
+---
+
+##### Clock Recovery and Scrambling
+- **Overhead bytes:** encoded with NRZ (simple high/low signals).  
+- **Payload bytes:** scrambled (XORed with a 127-bit pattern) to maintain frequent transitions → easier clock recovery.
+
+---
+
+##### Multiplexing & Frame Rates
+SONET supports multiple rate levels, each an integer multiple of **STS-1**:
+
+| Signal | Rate | Description |
+|---------|------|-------------|
+| STS-1 | 51.84 Mbps | Base unit |
+| STS-3 | 155.52 Mbps | 3 × STS-1 |
+| STS-12 | 622 Mbps | Higher aggregate link |
+| STS-768 | ~40 Gbps | Large optical backbone |
+
+Each frame = **125 μs**.  
+Frames can be **interleaved** (byte-by-byte) or **concatenated (STS-Nc)** to form larger logical channels.
+
+Example:  
+- **STS-3c:** single 155 Mbps channel  
+- **STS-3:** three separate 51 Mbps channels sharing fiber
+
+---
+
+##### Payload Floating
+SONET allows the payload to “float” across frame boundaries — marked by a pointer in the overhead.  
+This helps synchronize timing across carrier networks and simplifies maintenance and clock alignment.
+
+---
+
+### 🧮 Comparison of Framing Methods
+
+| Method | Example | Frame Marker | Error Handling | Fixed Size? | Notes |
+|---------|----------|---------------|----------------|--------------|--------|
+| **Byte-Oriented** | PPP | Special characters (STX/ETX) | Character stuffing | No | Simple, human-readable |
+| **Bit-Oriented** | HDLC | Bit pattern `01111110` | Bit stuffing | No | Compact and robust |
+| **Clock-Based** | SONET | Timing intervals | Sync patterns | Yes | Used in high-speed optical links |
+
+---
+
+### 🧠 Takeaways
+- **Framing** defines **boundaries** within continuous data streams.  
+- Techniques evolved from **sentinels and stuffing (PPP, HDLC)** to **precise timing synchronization (SONET)**.  
+- Each balances **simplicity**, **robustness**, and **efficiency** based on network type.  
+- SONET demonstrates framing’s larger role: **multiplexing, timing alignment, and carrier-grade reliability.**
+
+---
+
+## 🧾 Glossary
+
+| Term | Definition |
+|------|-------------|
+| **Frame** | Structured data block with headers, payload, and trailers. |
+| **Framing** | Defining start and end boundaries of frames in a bitstream. |
+| **Adaptor** | Hardware that sends/receives frames between computer and link. |
+| **Sentinel Character** | Special byte marking frame start or end. |
+| **Character Stuffing** | Inserting escape bytes to avoid confusion with sentinels. |
+| **Bit Stuffing** | Adding zeros after sequences of ones to preserve frame boundaries. |
+| **PPP (Point-to-Point Protocol)** | Byte-oriented framing protocol for IP over direct links. |
+| **LCP (Link Control Protocol)** | Subprotocol of PPP for negotiation and setup. |
+| **HDLC** | Bit-oriented framing protocol using flag patterns and bit stuffing. |
+| **CRC (Cyclic Redundancy Check)** | Error-detection code appended to frames. |
+| **SONET (Synchronous Optical Network)** | Clock-based optical transmission standard. |
+| **STS (Synchronous Transport Signal)** | SONET’s frame structure designation (e.g., STS-1, STS-3). |
+| **OC (Optical Carrier)** | Optical equivalent of STS (e.g., OC-3 = STS-3). |
+| **STS-Nc (Concatenated)** | Combined STS frames forming one large channel. |
+| **Scrambling** | XORing data with a pattern to ensure enough transitions for synchronization. |
+| **Multiplexing** | Combining multiple lower-rate streams into one high-speed link. |
+| **Payload Floating** | Allowing data to shift within frames to maintain timing sync. |
+
+---
+
+**💡 Insight:**  
+Framing is what turns raw bit streams into *messages*.  
+From PPP to SONET, it’s not just about marking where data starts and ends — it’s about keeping the network synchronized, error-free, and scalable, even at global carrier speeds.
