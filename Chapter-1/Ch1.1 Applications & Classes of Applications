@@ -1,0 +1,91 @@
+# 🌐 Chapter 1 — Applications & Classes of Applications
+
+## 📘 Summary
+This section explores how people use and experience the Internet, the key groups involved in its development and operation, and the major categories of Internet applications.  
+It connects user experience (like web browsing or streaming) to the underlying network behaviors that make those experiences possible.
+
+---
+
+## 🔑 Key Points
+
+### 1. Internet Users and Constituencies
+The Internet involves multiple communities with different roles and perspectives:
+
+- **Primary Users:**  
+  Most people experience the Internet through applications like web browsers, email, social media, streaming, and messaging.
+
+- **Application Developers:**  
+  They create these services and tools. Development has become easier due to smartphones and high-level frameworks.
+
+- **Network Operators:**  
+  Manage and maintain the infrastructure that keeps the Internet running.  
+  Even home users operate small-scale networks (e.g., Wi-Fi routers).
+
+- **System Designers:**  
+  Engineers who build the devices, architectures, and protocols that power Internet communication — the main focus of networking studies.
+
+> Understanding all four perspectives — **users**, **developers**, **operators**, and **designers** — helps create more efficient and user-friendly networks.
+
+---
+
+### 2. Classes of Internet Applications
+
+#### 🕸️ The World Wide Web
+- Made the Internet accessible to the public through linked multimedia pages (text, images, links).  
+- Each element is identified by a **URL (Uniform Resource Locator)** — e.g.,  
+  `http://www.cs.princeton.edu/~llp/index.html`
+- Behind every click, multiple processes occur:
+  - DNS resolution (converting names to IPs)
+  - TCP connection setup
+  - HTTP request and response exchanges
+  - Connection termination
+- A single page can trigger **dozens of network messages**, revealing the complexity behind simple interactions.
+
+#### 🎵 Streaming Audio and Video
+- Examples: **YouTube, Spotify, Netflix**
+- Delivers continuous data in real time — users can start playback before the entire file downloads.
+- Sensitive to **delay and bandwidth**; interruptions or lag degrade the user experience.
+- Prioritizes **timely delivery** over perfect reliability.
+
+#### 💬 Real-Time Audio/Video (e.g., VoIP, Video Calls)
+- Examples: **Zoom, Skype, Teams**
+- Involves **two-way, live communication**, requiring extremely low latency (ideally under 300 ms round trip).
+- Synchronizes **audio and video streams** while adapting to limited bandwidth.
+- Even slight delays can disrupt the natural flow of conversation.
+
+---
+
+### 3. Implications for Network Design
+Different applications impose different technical requirements:
+
+| Type of Application | Key Requirement | Example |
+|---------------------|------------------|----------|
+| Web Browsing | Reliable delivery | HTTP over TCP |
+| Streaming | Continuous data flow, minimal buffering | Netflix, Spotify |
+| Real-Time Communication | Low latency, synchronization | Zoom, Teams |
+
+A well-designed network must **balance reliability, speed, and interactivity** across all these use cases.  
+Later chapters will classify (taxonomize) these application types to guide better network architecture.
+
+---
+
+## 🧾 Glossary
+
+| Term | Meaning |
+|------|----------|
+| **Application** | A program or service people use to interact with the Internet (e.g., browsers, streaming apps). |
+| **URL (Uniform Resource Locator)** | A unique identifier that specifies where and how to access an online resource. |
+| **HTTP (Hypertext Transfer Protocol)** | The standard protocol for transferring web content. |
+| **IP Address (Internet Protocol Address)** | A numerical label identifying a device or server on the Internet. |
+| **TCP (Transmission Control Protocol)** | Ensures reliable, ordered data delivery between computers. |
+| **Streaming** | Continuous transfer of audio or video that plays as it downloads. |
+| **Real-Time Communication** | Interaction that requires immediate feedback (e.g., calls, video chats). |
+| **Latency** | Delay between sending and receiving data — critical in real-time applications. |
+| **Network Operator** | Manages the infrastructure enabling data to travel across networks. |
+| **Protocol** | A set of rules that defines how devices communicate and exchange data. |
+
+---
+
+**💡 Insight:**  
+Understanding how each type of Internet application interacts with the network helps engineers design systems that are responsive, efficient, and resilient — balancing human experience with technical constraints.
+
