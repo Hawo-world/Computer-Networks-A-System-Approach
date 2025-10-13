@@ -1,0 +1,204 @@
+# 🌐 Chapter 1 — Network Architecture
+
+## 📘 Summary
+This section explains how **network architectures** provide structured blueprints for building communication systems.  
+Through **layering**, **protocols**, **encapsulation**, **multiplexing**, and **standardized models** (like OSI and TCP/IP), architectures enable networks to evolve, interoperate, and scale efficiently — all while hiding complexity from users and applications.
+
+---
+
+## 🔑 Key Points
+
+### 🧩 1.3.1 Layering and Protocols
+
+#### a. The Role of Abstraction
+- **Abstraction** hides implementation details and presents a simplified interface.  
+- It breaks complex systems into modular components that are easier to design and maintain.  
+- Example: Logical “channels” are abstractions that hide lower-level network operations from applications.
+
+#### b. The Layering Concept
+- Networks are divided into **layers**, each building on the services of the one below.  
+- Each layer:
+  - Provides a specific function (e.g., reliability, addressing).  
+  - Communicates with its **peer layer** on another device.
+
+**Benefits:**
+- **Modularity:** Layers can evolve independently.  
+- **Manageability:** Simplifies understanding and maintenance.
+
+**Example:**  
+- Hardware layer → physical transmission  
+- Next layer → host-to-host communication  
+- Higher layer → process-to-process communication for applications
+
+#### c. Protocols
+- A **protocol** defines the rules and format for communication between peers.  
+- Each protocol has:
+  - **Service Interface:** How local apps use it.  
+  - **Peer Interface:** How two peers communicate.  
+
+**Example:**  
+HTTP’s service interface allows browsers to request pages, while the peer interface defines how GET/POST messages are structured and exchanged.
+
+#### d. Protocol Graphs and Stacks
+- Protocols depend on one another, forming a **protocol graph**.  
+- A **protocol stack** is the sequence of protocols used to send/receive data.  
+  - Example: File transfer → Request/Reply Protocol (RRP) → Host-to-Host Protocol (HHP)
+
+**Key Terms:**
+- **Protocol Specification:** Defines behavior and structure.  
+- **Protocol Implementation:** The software that realizes the spec.  
+- **Interoperability:** When different implementations of the same protocol can communicate.
+
+#### e. Standardization Bodies
+Organizations that ensure global compatibility:
+- **IETF** — Internet standards (TCP/IP, DNS, HTTP).  
+- **ISO** — OSI reference model.  
+- **IEEE** — LAN/Wi-Fi standards (Ethernet, 802.11).  
+
+> **Standardization ensures that devices and software across the world “speak the same language.”**
+
+---
+
+### 🧱 1.3.2 Encapsulation
+
+#### a. Definition
+**Encapsulation** = wrapping data with headers (and sometimes trailers) as it moves down protocol layers.  
+Each header adds control information for its peer layer (e.g., addressing, sequencing).
+
+#### b. Process
+1. Application creates data.  
+2. Upper layer (e.g., RRP) adds its header.  
+3. Lower layers (e.g., HHP) add additional headers.  
+4. At the destination, each layer removes its corresponding header and passes the payload upward.
+
+**Example:**  
+`Application Data → RRP Header → HHP Header → Transmission → Reverse Unwrapping at Receiver`
+
+#### c. Purpose
+- Enables **modular communication**.  
+- Each layer handles only its own headers.  
+- Supports transformations like encryption and compression of the payload.
+
+---
+
+### 🔀 1.3.3 Multiplexing and Demultiplexing
+
+#### a. Multiplexing
+- Multiple applications share the same network connection.  
+- Achieved using **demultiplexing keys (demux keys)** — identifiers in headers specifying which app or protocol the data belongs to.
+
+#### b. Demultiplexing
+- At the receiver, headers are examined to route data to the correct application.  
+- Each layer (e.g., RRP, HHP) can have its own demux key.
+
+**Example:**  
+A **port number** in a header indicates whether the data should go to a browser, mail client, or another application.
+
+---
+
+### 🧮 1.3.4 OSI Model (Open Systems Interconnection)
+
+#### a. Overview
+Developed by ISO as a **7-layer reference model** for networking standardization.  
+While not directly implemented in modern networks, its terminology remains foundational.
+
+#### b. OSI Layers (Bottom → Top)
+
+| # | Layer | Function |
+|---|--------|-----------|
+| 7 | **Application** | Interfaces with user applications (HTTP, FTP, SMTP). |
+| 6 | **Presentation** | Data formatting, encoding, compression, encryption. |
+| 5 | **Session** | Manages sessions, synchronization, and dialog control. |
+| 4 | **Transport** | Process-to-process communication (TCP/UDP equivalent). |
+| 3 | **Network** | Routing and addressing (IP). |
+| 2 | **Data Link** | Frames data; handles local delivery and error detection (Ethernet, Wi-Fi). |
+| 1 | **Physical** | Transmits raw bits via cables, fiber, or radio. |
+
+#### c. Implementation
+- **Layers 1–3:** Run on all devices (hosts and switches).  
+- **Layers 4–7:** Run only on end hosts.
+
+---
+
+### 🌍 1.3.5 Internet (TCP/IP) Architecture
+
+#### a. Overview
+The **Internet architecture**, or **TCP/IP model**, evolved from ARPANET.  
+It’s a **simplified 4–5 layer model** maintained by the **IETF** and used globally.
+
+#### b. Layers of the Internet Architecture
+
+| Layer | Key Protocols / Examples | Function |
+|--------|---------------------------|-----------|
+| **Application** | HTTP, FTP, SMTP, DNS | User-facing applications and services. |
+| **Transport** | TCP, UDP | Provides reliable or best-effort process communication. |
+| **Internet** | IP | Handles addressing and routing across networks. |
+| **Link / Subnetwork** | Ethernet, Wi-Fi, 5G | Connects hosts within local networks. |
+| **Physical** | (Part of Link) | Transmits raw bits via physical media. |
+
+> The Internet model is less rigid than OSI — applications can bypass layers when needed.
+
+#### c. Key Features of the Internet Architecture
+
+**Hourglass Model:**  
+- IP acts as the narrow “waist” — unifying layer between diverse hardware below and diverse applications above.  
+- Promotes flexibility and innovation at both ends.
+
+**Layer Independence:**  
+- Applications can use IP directly or define new transport layers.  
+- Encourages continuous adaptation and evolution.
+
+**IETF’s Philosophy:**  
+> “Rough consensus and running code.”  
+A protocol must have both a clear specification **and** a working implementation before it’s standardized.
+
+**Collaborative Governance:**
+- **IETF:** Core Internet protocols  
+- **IEEE, W3C, 3GPP, ITU-T:** Supporting technologies (Ethernet, Web, Cellular, Video)  
+- **ICANN / IANA:** Manage domain names, IPs, and protocol numbers globally
+
+> **Main takeaway:**  
+> The Internet’s success lies in its **hourglass design**, **layer flexibility**, and **culture of practical innovation**.
+
+---
+
+## 📘 Overall Takeaways
+
+- Network architectures bring **structure** to communication systems.  
+- **Layering** enables modularity and scalability.  
+- **Encapsulation** and **multiplexing** organize efficient data flow.  
+- **Standard models** (OSI, TCP/IP) ensure interoperability.  
+- The **Internet’s hourglass design**, centered on IP, fuels flexibility and innovation.  
+- The **IETF’s philosophy** prioritizes working implementations over bureaucracy — leading to real-world success.
+
+---
+
+## 🧾 Glossary
+
+| Term | Meaning |
+|------|----------|
+| **Abstraction** | Hiding implementation details to simplify system design. |
+| **Layering** | Structuring networks into stacked levels of responsibility. |
+| **Protocol** | Set of rules for data exchange between peers. |
+| **Service Interface** | How local applications access a protocol’s services. |
+| **Peer Interface** | How two instances of a protocol communicate between hosts. |
+| **Protocol Stack** | Ordered set of protocols used in communication. |
+| **Encapsulation** | Wrapping data with headers/trailers as it descends layers. |
+| **Header / Trailer** | Control info added to the beginning or end of a packet. |
+| **Multiplexing / Demultiplexing** | Combining multiple data streams into one channel / splitting them apart. |
+| **Demux Key** | Identifier (like a port number) to route packets to the right app. |
+| **OSI Model** | 7-layer reference model standardizing network functions. |
+| **Internet (TCP/IP) Model** | Practical 4–5 layer model used in real networks. |
+| **Hourglass Model** | Design where IP acts as the universal middle layer. |
+| **IETF** | Defines Internet standards (TCP, IP, DNS). |
+| **IEEE** | Defines Ethernet, Wi-Fi, and other Layer 2 standards. |
+| **ICANN / IANA** | Manage domains and protocol identifiers globally. |
+| **Interoperability** | Ability of different systems to communicate seamlessly. |
+| **Rough Consensus and Running Code** | IETF’s principle favoring tested, working solutions. |
+
+---
+
+**💡 Insight:**  
+Network architecture is what turns physical connections into **scalable, flexible systems**.  
+By layering abstractions and enforcing open standards, networks can **evolve endlessly** while maintaining global interoperability.
+
