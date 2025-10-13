@@ -1,0 +1,132 @@
+# 🌐 Chapter 1 — Requirements
+
+## 📘 Summary
+This section introduces the **core requirements and design principles** of building computer networks from the ground up.  
+It focuses on *why* networks are structured the way they are — helping you understand the reasoning behind their evolution, scalability, and efficiency as technology advances.
+
+---
+
+## 🔑 Key Points
+
+### 🧩 1.2.1 Stakeholders
+
+A well-designed network must satisfy the needs of **three main groups**:
+
+| Stakeholder | Focus | Example Requirements |
+|--------------|--------|----------------------|
+| **Application Programmers** | Functionality & reliability | Guaranteed message delivery, fast performance, seamless mobility (e.g., switching between Wi-Fi and cellular). |
+| **Network Operators** | Manageability & stability | Easy fault isolation, simple configuration for new devices, accurate usage tracking. |
+| **Network Designers** | Efficiency & cost | Optimized resource use, fair bandwidth sharing, and high overall performance. |
+
+> **Main takeaway:** Each stakeholder has unique priorities.  
+> Understanding them helps define trade-offs that balance **performance, usability, and cost** — the heart of network design.
+
+---
+
+### 🌐 1.2.2 Scalable Connectivity
+
+A network’s most fundamental goal is to **connect devices efficiently and at scale**.
+
+#### a. Connectivity Basics
+- **Links:** Physical communication paths (fiber optics, cables, wireless channels).  
+- **Nodes:** Devices connected to the network.
+  - *Hosts* use the network (e.g., computers, phones).  
+  - *Switches/Routers* operate and manage traffic flow.
+- **Point-to-Point Links:** Connect two nodes directly.  
+- **Multiple-Access Links:** Shared by many nodes (e.g., Wi-Fi, cellular).
+
+#### b. Direct vs. Indirect Connections
+- Directly linking every device is **impractical and expensive**.  
+- **Indirect connectivity** via routers and switches enables scalability and cost-efficiency.
+
+#### c. Network Types
+- **Switched Networks:** Use switches to forward packets between nodes.  
+  - *Circuit-switched:* Dedicated path per connection (like telephone lines).  
+  - *Packet-switched:* Data divided into packets sent independently — used in modern computer networks.
+- **Internetworks (Internets):**
+  - Combine multiple smaller networks using routers or gateways.
+  - The **Internet** (capital “I”) is the global-scale example — connecting networks of networks.
+
+#### d. Addressing & Routing
+- Each node has a unique **address**.  
+- **Routing** determines how messages travel toward their destination.
+- **Communication Types:**
+  - *Unicast:* One-to-one  
+  - *Broadcast:* One-to-all  
+  - *Multicast:* One-to-many (selected group)
+
+> **Main takeaway:** Networks scale by building hierarchically — from **links → networks → internetworks**.  
+> Addressing and routing ensure data reaches its target efficiently.
+
+---
+
+### ⚙️ 1.2.3 Cost-Effective Resource Sharing
+
+Networks must share limited resources (like bandwidth) **efficiently** while maintaining fairness and performance.
+
+#### a. Multiplexing (Sharing the Network)
+- **Multiplexing** = allowing multiple users to share a single resource (like a link).  
+- Comparable to timesharing — users take turns sending data.
+
+#### b. Multiplexing Methods
+
+| Type | How It Works | Limitations |
+|------|---------------|-------------|
+| **STDM (Synchronous Time-Division Multiplexing)** | Each flow gets a fixed time slot in round-robin order. | Idle time if no data to send; limited number of flows. |
+| **FDM (Frequency-Division Multiplexing)** | Each flow gets its own frequency band. | Inflexible — adding new users or resizing channels is difficult. |
+| **Statistical Multiplexing** | Data is sent on demand in variable slots; packets are interleaved as needed. | May cause congestion if too much data arrives too quickly. |
+
+> **Statistical multiplexing** is the foundation of **packet switching** — enabling flexible, efficient, and cost-effective communication.
+
+#### c. How Packet Switching Works
+- Data is divided into **packets**, which travel independently across the network.  
+- Switches forward packets dynamically, deciding which flow to handle next.  
+- If incoming traffic exceeds capacity:
+  - **Packets are buffered**, or  
+  - **Dropped** when buffers overflow — leading to **congestion**.
+
+#### d. Fairness and Quality of Service (QoS)
+- **Fairness:** Switches can schedule packets via *FIFO* (First In, First Out) or *round-robin*.
+- **QoS (Quality of Service):** Guarantees specific performance levels (bandwidth, delay, reliability) for critical data flows.
+
+> **Main takeaway:** Statistical multiplexing allows many users to share network resources dynamically.  
+> Managing congestion, fairness, and delay is essential for efficient performance.
+
+---
+
+## 📘 Key Takeaways (Overall)
+
+- Network design must balance **functionality**, **manageability**, and **efficiency**.  
+- Scalability arises from connecting smaller networks into **larger internetworks**.  
+- **Packet switching** and **statistical multiplexing** allow cost-effective resource sharing.  
+- **Addressing**, **routing**, and **QoS** ensure reliable communication across complex network structures.
+
+---
+
+## 🧾 Glossary
+
+| Term | Meaning |
+|------|----------|
+| **Node** | A device connected to a network (host, router, switch). |
+| **Link** | The physical medium (cable, fiber, wireless) connecting nodes. |
+| **Switch** | A device that forwards packets between nodes. |
+| **Router (Gateway)** | Connects multiple networks and routes data between them. |
+| **Packet** | A fixed-size unit of data sent independently across a network. |
+| **Address** | A unique identifier assigned to a node. |
+| **Routing** | The process of selecting paths for data to travel from source to destination. |
+| **Multiplexing** | Sharing a single link among multiple data flows. |
+| **STDM** | Synchronous Time-Division Multiplexing — assigns equal time slots to each flow. |
+| **FDM** | Frequency-Division Multiplexing — assigns separate frequency bands to each flow. |
+| **Statistical Multiplexing** | Dynamically shares bandwidth among active users on demand. |
+| **Packet Switching** | Transmitting data in small packets that are routed independently. |
+| **QoS (Quality of Service)** | Guarantees bandwidth or delay constraints for certain data flows. |
+| **Congestion** | When incoming traffic exceeds network capacity, causing delay or packet loss. |
+| **Scalability** | The ability of a network to grow without major redesign. |
+| **Unicast / Broadcast / Multicast** | One-to-one, one-to-all, and one-to-many communication models. |
+
+---
+
+**💡 Insight:**  
+At its core, networking is about **efficient, scalable communication** — connecting many systems while sharing limited resources fairly.  
+By mastering the *why* behind design decisions, you gain the foundation to understand and adapt to any future network architecture.
+
