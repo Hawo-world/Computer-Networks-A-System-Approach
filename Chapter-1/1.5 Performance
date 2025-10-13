@@ -1,0 +1,173 @@
+# 🌐 Chapter 1 — Performance
+
+## 📘 Summary
+While earlier sections focused on what networks *do*, this section focuses on **how well** they do it.  
+Network performance — measured mainly by **bandwidth** and **latency** — directly affects how efficiently distributed applications, services, and systems operate.  
+Designing for performance means understanding how these metrics interact and how application demands differ.
+
+---
+
+## 🔑 Key Points
+
+### ⚙️ 1.5.1 Bandwidth and Latency
+
+#### a. Bandwidth (Throughput)
+- **Bandwidth** = maximum rate of data transmission, measured in bits per second (bps).  
+  Example: `10 Mbps = 10 million bits per second`.
+- **Throughput** = actual data rate achieved in practice (usually lower due to overhead, congestion, and inefficiencies).
+- Bandwidth needs differ by application:
+  - Some use as much as possible (file transfers).
+  - Others only need a fixed minimum rate (video streams, VoIP).
+
+**Bandwidth can be measured at multiple levels:**
+- **Physical link:** fiber, wireless channel, cable.  
+- **Logical channel:** process-to-process communication.
+
+> Increasing bandwidth = sending more bits per second (a “wider pipe”).
+
+---
+
+#### b. Latency (Delay)
+- **Latency** = total time for a message to travel from sender to receiver.  
+- Typically measured as **Round Trip Time (RTT)** = forward + return.
+
+**Components of latency:**
+| Component | Definition | Example Cause |
+|------------|-------------|----------------|
+| **Propagation delay** | Distance / signal speed (~2 × 10⁸ m/s in fiber) | Physical distance |
+| **Transmission delay** | Packet size / bandwidth | Slow links |
+| **Queuing delay** | Time waiting in router/switch queues | Congestion |
+
+> **Latency = Propagation + Transmission + Queuing**
+
+**Latency vs. Bandwidth Dominance:**
+- **Latency-bound:** Small messages → round-trip delay dominates.  
+- **Bandwidth-bound:** Large data transfers → throughput dominates, delay less relevant.
+
+**Example:**  
+Transferring a 25 MB image over 10 Mbps takes ≈ 20 seconds — regardless of RTT (1 ms or 100 ms).
+
+---
+
+#### c. Analogy and Perspective
+Computers can perform **billions of operations** while waiting for network responses.  
+Example: A 100 billion instructions/sec CPU waiting 100 ms wastes 10 billion instructions — roughly **2 million instructions per mile** of network distance.
+
+---
+
+### 🧮 1.5.2 Delay × Bandwidth Product
+
+#### a. Concept
+- Represents the **“volume” of data in flight** in the network.
+- Think of the network as a **pipe**:
+  - **Latency =** pipe length.  
+  - **Bandwidth =** pipe width.  
+  - **Product =** total volume (bits currently in transit).
+
+#### b. Example
+- `45 Mbps × 50 ms = 2.25 × 10⁶ bits ≈ 280 KB in flight`
+- `100 ms RTT → 5.5 × 10⁶ bits ≈ 671 KB`
+→ The sender must fill this “pipe” to fully utilize the link.
+
+#### c. Implications
+- If the sender stops too early → **underutilization**.  
+- If the receiver halts → data still in transit will keep arriving (one RTT’s worth).  
+- **TCP window sizes and buffer management** must account for this.
+
+#### d. Typical RTT × Bandwidth Examples
+
+| Link Type | Bandwidth | RTT | RTT × Bandwidth |
+|------------|------------|-----|-----------------|
+| Wireless LAN | 54 Mbps | 0.33 μs | 18 bits |
+| Satellite | 1 Gbps | 230 ms | 230 Mb |
+| Cross-country Fiber | 10 Gbps | 40 ms | 400 Mb |
+
+---
+
+### 🚀 1.5.3 High-Speed Networks
+
+#### a. Infinite Bandwidth vs. Finite Latency
+- Bandwidth continues to increase, but **latency is limited by physics** (speed of light).
+- Example: Cross-country RTT ≈ 100 ms regardless of bandwidth.
+
+#### b. Impact on Performance
+**Example:**
+- 1 MB file  
+  - 1 Mbps link → 80 RTTs (~8 s)  
+  - 1 Gbps link → 1/12 RTT (~0.1 s)
+
+> High-speed links have **large delay × bandwidth products**, meaning you must keep the pipeline full.
+
+#### c. Throughput Relationship
+\[
+\text{Throughput} = \frac{\text{Transfer Size}}{\text{RTT} + \frac{\text{Transfer Size}}{\text{Bandwidth}}}
+\]
+
+**Example:**  
+1 MB file over 1 Gbps link with 100 ms RTT → total ≈ 108 ms → effective throughput ≈ **74 Mbps**.  
+→ Larger transfers use the link more efficiently; smaller ones lose time to setup and RTT overhead.
+
+---
+
+### 🎬 1.5.4 Application Requirements
+
+#### a. Different Needs
+Different applications prioritize different performance metrics:
+- **Bulk Transfer (File Download):** Maximize throughput.  
+- **Real-time Media (Video/Voice):** Low delay and consistent bandwidth.
+
+#### b. Variable Rates and Compression
+- Video bit rate varies with scene complexity and compression.  
+  - Average: 2 Mbps  
+  - Bursts: up to 3 Mbps+
+- **Buffers** absorb short bursts to avoid packet loss.
+
+#### c. Jitter (Delay Variation)
+- **Jitter** = variation in packet arrival times due to network delay.
+- **No jitter:** packets evenly spaced.  
+- **With jitter:** packets arrive inconsistently (causing stutter/freezes).
+
+**Effect on Media:**
+- Early packets can be buffered.  
+- Late packets cause playback interruptions.  
+- **Solution:** Receiver buffers and delays playback slightly to smooth timing.
+
+---
+
+## 📘 Overall Takeaways
+
+- **Performance = Bandwidth + Latency** — both shape application responsiveness.  
+- **Delay × Bandwidth Product** determines how much data can be in transit.  
+- High-speed networks expose **latency limits**, not just throughput.  
+- Applications have **diverse performance needs** — some want throughput, others delay stability.  
+- Managing **jitter and buffering** is essential for smooth real-time experiences.  
+- Efficient performance design means balancing **physics, protocols, and application demands.**
+
+---
+
+## 🧾 Glossary
+
+| Term | Meaning |
+|------|----------|
+| **Bandwidth** | Maximum data rate a network can transmit (bits per second). |
+| **Throughput** | Actual achieved data rate between hosts. |
+| **Latency (Delay)** | Time for data to travel from source to destination. |
+| **RTT (Round-Trip Time)** | Time for data to go to destination and return. |
+| **Propagation Delay** | Delay caused by finite signal speed. |
+| **Transmission Delay** | Time to send all packet bits (size ÷ bandwidth). |
+| **Queuing Delay** | Waiting time in router/switch buffers. |
+| **Delay × Bandwidth Product** | Amount of data “in flight” in the network. |
+| **High-Speed Network** | A network with extremely high bandwidth but physical latency limits. |
+| **Throughput Formula** | `Transfer Size / (RTT + Transfer Size / Bandwidth)` |
+| **Burst Traffic** | Short, temporary increases in transmission rate. |
+| **Buffering** | Temporarily storing data to smooth variable rates or delay. |
+| **Jitter** | Variation in packet arrival times causing uneven playback. |
+| **Latency-Bound Application** | Performance limited by delay (small, frequent requests). |
+| **Bandwidth-Bound Application** | Performance limited by throughput (large file transfers). |
+
+---
+
+**💡 Insight:**  
+Network performance isn’t just about speed — it’s about **balance**.  
+By understanding how **latency, bandwidth, and jitter** interact, engineers can design systems that feel fast, reliable, and responsive — even across the vast distances of the Internet.
+
