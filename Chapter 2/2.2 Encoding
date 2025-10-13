@@ -1,0 +1,189 @@
+# 🌐 Chapter 2 — Encoding
+
+## 📘 Summary
+**Encoding** is the first step in turning a physical connection between two network nodes into a communication channel capable of transmitting bits.  
+It defines how binary data (1s and 0s) are represented as **electrical, optical, or radio signals** that can travel through a medium and be correctly interpreted by the receiver.
+
+---
+
+## 🔑 Key Points
+
+### ⚙️ 1. Purpose of Encoding
+- Encoding converts **binary data** from a sender into **physical signals** that can move through copper, fiber, or air.  
+- The receiver then decodes these signals back into bits.
+
+Typical two-level signal mapping:
+- **High** → represents `1`  
+- **Low** → represents `0`
+
+These may correspond to:
+- Two voltages (copper wire)  
+- Two light intensities (optical fiber)  
+- Two amplitude levels (radio signals)
+
+---
+
+### 💻 2. Role of the Network Adaptor
+- The **network adaptor** (e.g., a NIC — Network Interface Card) connects a computer to a link.  
+- It handles **bit-level signaling**:
+  - Encoding bits into signals (sender)
+  - Decoding signals into bits (receiver)
+
+**Conceptual flow:**
+> Bits move between adaptors,  
+> while signals travel between the adaptors over the medium.  
+
+*(Refer to Figure 23 — signals between adaptors, bits between computers.)*
+
+---
+
+### ⚠️ 3. The Challenge
+Main encoding challenges:
+1. **Signal Integrity** – avoid baseline drift.  
+2. **Clock Synchronization** – maintain timing between sender and receiver.  
+3. **Avoiding long runs of identical bits** – ensure enough transitions for timing recovery.
+
+When long sequences of `1`s or `0`s occur:
+- **Baseline Wander:** receiver’s average signal drifts, blurring distinction between 0 and 1.  
+- **Clock Recovery Issue:** without transitions, receiver loses sync with sender.
+
+---
+
+### 🔤 4. Common Encoding Schemes
+
+#### (a) NRZ — Non-Return to Zero
+- Simplest form:  
+  - `1 = High`, `0 = Low`
+- Problem: long identical bits → baseline wander, clock drift.  
+- **Efficiency:** 100%
+
+---
+
+#### (b) NRZI — Non-Return to Zero Inverted
+- A **transition** represents a `1`; no transition represents a `0`.  
+- Fixes long runs of 1s but fails for long runs of 0s.  
+- **Efficiency:** 100%
+
+---
+
+#### (c) Manchester Encoding
+- Combines **data** and **clock** signals to maintain synchronization.  
+- Each bit period divided into two halves:  
+  - `0` = low → high transition  
+  - `1` = high → low transition  
+- Guarantees frequent transitions → easy clock recovery.  
+- Downside: doubles the required bandwidth.  
+- **Efficiency:** 50% (bit rate = ½ baud rate)
+
+**Differential Manchester:**  
+- `1` = same phase as previous bit  
+- `0` = opposite phase  
+- More resistant to noise and phase shifts.
+
+---
+
+#### (d) Advanced Modulation (Beyond Binary)
+Modern links encode **multiple bits per symbol** using multiple signal states:
+
+| Levels | Bits per Symbol | Example |
+|---------|----------------|----------|
+| 4 levels | 2 bits | QAM-4 |
+| 8 levels | 3 bits | QAM-8 |
+| 16 or 64 levels | 4–6 bits | QAM-16 / QAM-64 |
+
+**QAM (Quadrature Amplitude Modulation):**  
+Combines **amplitude** and **phase** variations to encode data efficiently.
+
+---
+
+#### (e) 4B/5B Encoding
+- Replaces every **4 bits** of data with a **5-bit code** that avoids long runs of zeros or ones.  
+- Ensures:
+  - ≤ 1 leading zero  
+  - ≤ 2 trailing zeros  
+- 5-bit sequences are sent using **NRZI** encoding.
+
+**Efficiency:** 80% (4 bits of data → 5 transmitted bits)
+
+**Advantages:**
+- Prevents long idle sequences.  
+- Adds control codes for **framing** and **error states**.
+
+| Data (4 bits) | Code (5 bits) |
+|----------------|----------------|
+| 0000 | 11110 |
+| 0001 | 01001 |
+| 0010 | 10100 |
+| 0011 | 10101 |
+| 0100 | 01010 |
+| 0101 | 01011 |
+| 0110 | 01110 |
+| 0111 | 01111 |
+| 1000 | 10010 |
+| 1001 | 10011 |
+| 1010 | 10110 |
+| 1011 | 10111 |
+| 1100 | 11010 |
+| 1101 | 11011 |
+| 1110 | 11100 |
+| 1111 | 11101 |
+
+**Special Codes:**
+| Code | Meaning |
+|------|----------|
+| 11111 | Idle line |
+| 00000 | Dead line |
+| 00100 | Halt signal |
+
+---
+
+### ⚖️ 5. Efficiency Comparison
+
+| Encoding | Transition Behavior | Clock Recovery | Efficiency |
+|-----------|---------------------|----------------|-------------|
+| **NRZ** | None during identical bits | Poor | 100% |
+| **NRZI** | Transitions on `1`s only | Better | 100% |
+| **Manchester** | Transition every bit | Excellent | 50% |
+| **4B/5B (NRZI)** | Controlled zeros | Excellent | 80% |
+
+---
+
+### 🧭 6. Takeaway
+Encoding bridges the gap between **digital data** and **physical transmission**.  
+It ensures that signals remain **interpretable, synchronized, and reliable**, even under noisy or imperfect conditions.  
+
+The evolution from **NRZ → Manchester → 4B/5B** reflects a continual balance between:
+- **Efficiency**
+- **Synchronization**
+- **Signal Integrity**
+
+These principles remain fundamental to all modern communication systems — from Ethernet to optical networks.
+
+---
+
+## 🧾 Glossary
+
+| Term | Definition |
+|------|-------------|
+| **Encoding** | Mapping binary bits to physical signal patterns for transmission. |
+| **Network Adaptor** | Hardware device connecting a node to a link; performs encoding/decoding. |
+| **Signal** | Electrical, optical, or radio waveform carrying data. |
+| **Baseline Wander** | Drift in signal average level after long identical bits, making decoding unreliable. |
+| **Clock Recovery** | Synchronizing receiver timing with sender’s bit rate. |
+| **Baud Rate** | Number of signal changes (symbols) per second. |
+| **Bit Rate** | Number of bits transmitted per second. |
+| **NRZ** | Non-Return to Zero — simple binary encoding; prone to clock issues. |
+| **NRZI** | Non-Return to Zero Inverted — transitions encode 1s, improving sync. |
+| **Manchester Encoding** | Combines data + clock for easy synchronization. |
+| **Differential Manchester** | Encodes bits relative to previous phase; noise-resistant. |
+| **QAM** | Quadrature Amplitude Modulation; encodes multiple bits per symbol via amplitude & phase shifts. |
+| **Symbol** | Distinct signal pattern representing one or more bits. |
+| **4B/5B Encoding** | Converts 4 data bits to 5-bit codes to ensure transitions and add control states. |
+| **Idle Code (11111)** | Indicates no data; link is active but idle. |
+| **Halt Code (00100)** | Used to signal transmission stop. |
+
+---
+
+**💡 Insight:**  
+Encoding is where digital meets physical — it’s what turns a stream of bits into energy that moves.  
+Every blink of light in a fiber or radio pulse in the air starts here — with clever encoding that keeps communication fast, accurate, and synchronized.
