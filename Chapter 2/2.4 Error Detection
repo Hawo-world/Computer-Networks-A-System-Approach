@@ -1,0 +1,256 @@
+# 🌐 Summary: 2.4 Error Detection
+
+Even on reliable links, bit errors can occur due to interference or noise.
+Error detection mechanisms ensure that such corruption is identified (and sometimes corrected) before corrupted data propagates further in the network.
+
+This section covers the two main categories of error handling:
+
+Error Detection – identifying that an error occurred.
+
+Error Correction – reconstructing the correct data or requesting retransmission.
+
+Two primary techniques used in networking are:
+
+Internet Checksum (software-based, simple)
+
+Cyclic Redundancy Check (CRC) (hardware-based, powerful, used at link layer)
+
+---
+
+## 🔑 Key Points
+
+### 1. Purpose of Error Detection
+Transmission errors arise from electrical interference, thermal noise, or signal degradation.
+
+Even rare errors can have severe consequences (e.g., corrupted files, invalid programs).
+
+Error detection adds redundant bits that allow receivers to verify data integrity.
+
+---
+
+### 2. General Principle
+The sender adds extra bits (an error-detecting code) derived from the original message using a known algorithm.
+
+The receiver applies the same algorithm:
+
+If the calculated result matches → message is likely valid.
+
+If not → error detected.
+
+These extra bits are redundant (contain no new information) but enable validation.
+
+---
+
+### 3. Error Handling Strategies
+Detection + Retransmission:
+Receiver discards corrupted data and requests the sender to resend.
+
+Used in most networks (efficient if errors are rare).
+
+Forward Error Correction (FEC):
+Receiver reconstructs the correct data using redundant bits.
+
+Used when retransmission is costly or slow (e.g., wireless or satellite links).
+
+---
+
+### 4. Internet Checksum Algorithm (2.4.1)
+
+**Overview**
+
+Used in Internet protocols (e.g., IP, TCP, UDP).
+
+Simpler than CRC; implemented in software.
+
+Operates on 16-bit words using ones’ complement arithmetic.
+
+**Process**
+
+Divide the data into 16-bit chunks.
+
+Add all chunks together using ones’ complement addition:
+
+If there’s a carry-out from the most significant bit, wrap it around and add it back.
+
+Take the ones’ complement (bitwise NOT) of the sum.
+
+The result is the checksum.
+
+Receiver repeats the same process:
+
+If the result = 0xFFFF, data is correct.
+
+Otherwise, an error occurred.
+
+**Ones’ Complement Arithmetic Example**
+
++5 = 0101 → -5 = 1010 (bitwise inverse)
+
+Add -5 (1010) + -2 (1101) = 0111 → wrap carry → 1000 (which represents -7).
+
+**Implementation (Pseudocode)**
+```c
+u_short cksum(u_short *buf, int count) {
+    register u_long sum = 0;
+    while (count--) {
+        sum += *buf++;
+        if (sum & 0xFFFF0000) { // carry occurred
+            sum &= 0xFFFF;
+            sum++;
+        }
+    }
+    return ~(sum & 0xFFFF);
+}
+Pros and Cons
+
+### Pros	Cons
+Simple and fast (software-based)	Weaker protection than CRC
+Uses few extra bits (16 bits)	Certain multi-bit errors may go undetected
+
+# 5. Cyclic Redundancy Check (CRC) (2.4.2)
+Overview
+
+Used in nearly all link-layer protocols (e.g., Ethernet, Wi-Fi, HDLC, PPP).
+
+Based on polynomial division in finite fields (mod 2 arithmetic).
+
+Provides very strong error detection using few bits (e.g., 32-bit CRC for Ethernet).
+
+## Concept
+
+Treats the bit sequence as a polynomial:
+e.g., 10011010 → x⁷ + x⁴ + x³ + x¹
+
+Sender and receiver agree on a generator polynomial (G(x)).
+
+Sender appends a remainder (CRC bits) so that the entire message is exactly divisible by G(x).
+
+Receiver divides the received data by G(x):
+
+Remainder = 0 → No errors.
+
+Remainder ≠ 0 → Error detected.
+
+Steps in CRC Generation
+
+Let M(x) = message polynomial (n+1 bits).
+
+Append r zeros → M(x) × xʳ.
+
+Divide M(x) × xʳ by G(x).
+
+Subtract (XOR) the remainder from M(x) × xʳ.
+
+Transmit the result (message + CRC remainder).
+
+Receiver repeats the division check.
+
+### Example:
+
+Message: 10011010
+
+Generator: 1101 (degree 3)
+
+Division gives remainder: 101
+
+Transmit: 10011010 + 101 → 10011010101
+
+Properties of Polynomial Division
+
+Uses mod 2 arithmetic (XOR) instead of normal subtraction.
+
+Only coefficients 0 or 1 exist.
+
+## Rules:
+
+A polynomial can be divided if the divisor’s degree ≤ dividend’s degree.
+
+Remainder = XOR of matching bits.
+
+### Example:
+1001 ÷ 1101 → remainder 0100 (since 1001 XOR 1101 = 0100)
+
+# Error Detection Capability
+
+## Choosing a strong generator polynomial G(x) ensures reliable detection of:
+
+Type of Error	Detection Condition
+Single-bit error	Always detected if first and last bits of G(x) ≠ 0
+Double-bit error	Detected if G(x) has ≥ 3 nonzero terms
+Odd number of errors	Detected if G(x) contains (x + 1) factor
+Burst errors	Detected if burst length < degree of G(x) (and most longer bursts too)
+
+## Common CRC Polynomials
+
+Name	Degree	Typical Use
+CRC-16	16	PPP, USB
+CRC-32	32	Ethernet, ZIP files
+CRC-64	64	Advanced storage & high-integrity systems
+
+## Ethernet CRC-32 polynomial:
+
+x³² + x²⁶ + x²³ + x²² + x¹⁶ + x¹² + x¹¹ + x¹⁰ + x⁸ + x⁷ + x⁵ + x⁴ + x² + x + 1
+
+Hardware Implementation
+
+CRC can be computed using a shift register and XOR gates.
+
+Each bit of the message is shifted through the register.
+
+The placement of XOR gates corresponds to nonzero terms in G(x).
+
+After processing, the register holds the remainder (CRC bits).
+
+## Example:
+For generator G(x) = x³ + x + 1: XOR gates are placed at positions 0 and 2 (matching terms).
+
+6. Detection vs. Correction
+Detection (CRC, Checksum)	Correction (FEC)
+Fewer redundant bits	More redundant bits
+Retransmission required on error	Can fix some errors directly
+Common in wired networks	Common in wireless/satellite
+Efficient when errors are rare	Useful when retransmission is costly
+
+# 7. Forward Error Correction (FEC)
+Adds extra redundancy before transmission, allowing receiver to fix errors without retransmission.
+
+Increases data size but reduces need for feedback.
+
+## Used in:
+
+Wi-Fi (802.11)
+
+Cellular networks
+
+Satellite links
+
+# 🧠 Takeaways
+Error detection ensures data integrity by verifying received frames.
+
+Checksums are simple and CPU-friendly but weaker.
+
+CRCs provide robust protection with minimal overhead and are hardware-optimized.
+
+Error correction (FEC) is beneficial when retransmission is costly or slow.
+
+Together, these techniques form the foundation for reliable communication in all modern networks.
+
+# 🧾 Glossary
+Term	Definition
+Bit Error	A flipped or corrupted bit during transmission.
+Error Detection	Process of identifying corrupted data using redundant codes.
+Error Correction	Reconstructing the correct data from corrupted bits.
+Checksum	A sum-based error detection method using addition (e.g., Internet checksum).
+Ones’ Complement Arithmetic	Arithmetic system where negative numbers are represented by inverting all bits.
+CRC (Cyclic Redundancy Check)	A robust error detection code using polynomial division over mod-2 arithmetic.
+Generator Polynomial (G(x))	Predefined polynomial used to compute CRC remainders.
+Polynomial Mod 2 Arithmetic	Math where coefficients are 0 or 1, and addition/subtraction are XOR operations.
+Remainder (CRC bits)	The extra bits appended to data so the transmitted message divides evenly by G(x).
+Burst Error	A series of consecutive bit errors.
+Forward Error Correction (FEC)	Technique of sending redundant bits so the receiver can fix errors directly.
+XOR (Exclusive OR)	Logical operation used in mod-2 arithmetic (1 if bits differ, 0 if same).
+CRC-32	32-bit polynomial standard used in Ethernet and many protocols.
+Shift Register	Hardware circuit that sequentially shifts data bits and computes CRC using XOR gates.
+Finite Field (GF(2))	Mathematical field used in CRC computation with binary coefficients.
+
+---
