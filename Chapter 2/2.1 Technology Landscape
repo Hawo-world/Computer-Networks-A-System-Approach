@@ -1,0 +1,138 @@
+# 🌐 Chapter 2 — Technology Landscape
+
+## 📘 Summary
+Before exploring how to connect network nodes effectively, it’s important to understand the diverse **technologies that form the foundation of modern network links**.  
+
+This section provides an overview of link types — from the massive fiber cables connecting global routers to the Wi-Fi and cellular networks that bring everyday users online.  
+
+Despite their differences, all these technologies share a single goal: **to reliably carry bits between devices and make the Internet appear seamless and uniform** to users and routers.
+
+---
+
+## 🔑 Key Points
+
+### 🌎 1. Diversity of Network Links
+Network links vary widely in **scale and purpose**:
+
+| Link Type | Description |
+|------------|--------------|
+| **Global Backbone Links** | Span hundreds or thousands of kilometers, connecting large routers in ISPs and data centers. |
+| **Local Access Links** | Connect end-user devices (laptops, phones, routers) to ISPs using Wi-Fi, Ethernet, or cellular. |
+
+From an end-user’s view, all these connections appear as simple “lines” between devices — hiding immense complexity beneath.
+
+---
+
+### 🧠 2. Unified Network Abstraction
+One of the network’s greatest strengths is **abstraction** — hiding physical differences between technologies.  
+
+- A smartphone doesn’t need to know whether it’s on Wi-Fi, 5G, or fiber — it only knows it’s connected to the Internet.  
+- Routers forward packets across diverse links, trusting lower layers to handle reliability.  
+
+This abstraction makes the Internet scalable and device-independent, despite huge differences in physical media.
+
+---
+
+### ⚡ 3. Physical Media and Signal Basics
+All links transmit **electromagnetic (EM) signals** through some physical medium.
+
+#### Common Media:
+- **Copper wires:** twisted pair (Ethernet, DSL), coaxial (cable Internet).  
+- **Optical fiber:** high-speed backbone and fiber-to-the-home networks.  
+- **Air / Free Space:** wireless transmission (radio, infrared, microwave).
+
+#### Frequency and Wavelength:
+- **Frequency (Hz):** how fast EM waves oscillate.  
+- **Wavelength (m):** distance between peaks = *speed of light in medium ÷ frequency*.  
+  - Example: A 300 Hz signal through copper (speed ≈ 2×10⁸ m/s) → wavelength ≈ 667 km.
+
+#### The Electromagnetic Spectrum:
+Spans radio → infrared → visible light → x-rays.  
+Different **frequency bands** are allocated for different technologies.
+
+**Cellular frequency ranges:**
+- Traditional cellular: 700 MHz – 2400 MHz  
+- Mid-band: around 6 GHz  
+- **Millimeter-wave (mmWave):** above 24 GHz (used in 5G for high bandwidth over short distances)
+
+---
+
+### 🔤 4. Encoding and Modulation
+All link technologies must **encode binary data** (1s and 0s) into EM signals.
+
+| Concept | Description |
+|----------|--------------|
+| **Modulation (lower layer)** | Varies wave properties (frequency, amplitude, or phase) to represent data. |
+| **Encoding (upper layer)** | Maps bits to signal states (e.g., “high” = 1, “low” = 0). |
+
+Example: turning a light on/off to represent bits (amplitude modulation).  
+This chapter focuses more on **encoding** and less on physical modulation physics.
+
+---
+
+### 🧩 5. Link Classification by Use
+Different link types serve different technical and economic roles:
+
+#### (a) Last-Mile / Access Networks
+Connect individuals or businesses to the Internet via an ISP.  
+Optimized for **cost efficiency and accessibility**.
+
+| Service | Medium | Bandwidth | Notes |
+|----------|---------|------------|-------|
+| **DSL** | Copper | up to 100 Mbps | Uses existing telephone lines. |
+| **G.Fast** | Copper | up to 1 Gbps | Optimized for short distances (e.g., apartment buildings). |
+| **PON (Passive Optical Network)** | Fiber | up to 10 Gbps | Used for fiber-to-the-home broadband. |
+| **4G / 5G Cellular** | Wireless | up to multi-Gbps | Enables mobility and wireless home Internet. |
+
+#### (b) Backbone Networks
+High-capacity, long-distance links connecting ISPs, cities, and countries.  
+- Dominated by **optical fiber**.  
+- Common tech: **SONET (Synchronous Optical Network)** — built for carrier-grade reliability.
+
+#### (c) Local Area Networks (LANs)
+Short-range networks connecting computers in homes, offices, or campuses.
+- **Ethernet:** standard wired LAN.  
+- **Wi-Fi:** wireless LAN counterpart.
+
+---
+
+### 💡 6. Takeaway
+The Internet is built on a **diverse ecosystem of link technologies**, but thanks to **standardized protocols and abstraction**, it all feels like one unified system.  
+
+Understanding the physical and economic differences between local, access, and backbone networks helps explain why networking technologies evolve differently — and why certain trade-offs exist.
+
+Later sections dive deeper into **how bits are encoded, transmitted, and made reliable** across these link types.
+
+---
+
+## 🧾 Glossary
+
+| Term | Meaning |
+|------|----------|
+| **Link** | A connection that carries data between two network nodes. |
+| **Medium** | The physical material or channel through which signals travel (e.g., copper, fiber, air). |
+| **ISP (Internet Service Provider)** | Company that connects users to the Internet. |
+| **Backbone Network** | High-capacity infrastructure connecting major routers and ISPs. |
+| **Access Network / Last-Mile** | The connection between an ISP and the end user. |
+| **LAN (Local Area Network)** | A local network connecting devices within a building or campus. |
+| **Twisted Pair Cable** | Type of copper wire used in Ethernet and DSL. |
+| **Coaxial Cable** | Copper cable with shielding, used for cable Internet and TV. |
+| **Optical Fiber** | Cable transmitting data as light pulses, enabling very high bandwidth. |
+| **Wireless / Free Space Medium** | Transmission through air using radio or microwave signals. |
+| **Frequency (Hz)** | Number of EM wave oscillations per second. |
+| **Wavelength** | Physical distance between wave peaks. |
+| **Electromagnetic Spectrum** | Range of all EM frequencies (radio → gamma rays). |
+| **Modulation** | Altering wave properties (frequency, amplitude, phase) to carry information. |
+| **Encoding** | Mapping binary data into signal patterns. |
+| **DSL (Digital Subscriber Line)** | Internet over telephone lines. |
+| **G.Fast** | High-speed DSL variant for short-range copper. |
+| **PON (Passive Optical Network)** | Shared fiber system connecting multiple customers. |
+| **SONET** | Standard for high-speed optical backbone networks. |
+| **mmWave (Millimeter Wave)** | High-frequency radio band (24 GHz +) used in 5G. |
+| **5G** | Fifth-generation mobile network offering fast speeds and low latency. |
+
+---
+
+**💡 Insight:**  
+Beneath the Internet’s seamless surface lies a **patchwork of technologies** — fiber, copper, and wireless — all united by the principles of abstraction and interoperability.  
+Understanding this technological landscape is the first step toward mastering how networks truly connect the world.
