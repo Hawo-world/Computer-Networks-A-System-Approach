@@ -27,22 +27,6 @@ Whether you’re a student, self-learner, or someone brushing up on networking f
 
 ---
 
-## 🗂 Repository Structure
-
-📦 computer-networks-notes/
-┣ 📜 README.md
-┣ 📁 chapter1/
-┃ ┣ 🧭 problem-building-a-network.md
-┃ ┣ 🌐 applications-and-classes.md
-┃ ┣ ⚙️ requirements.md
-┃ ┣ 🔧 support-and-manageability.md
-┣ 📁 chapter2/
-┃ ┣ (coming soon)
-┣ 📁 chapter3/
-┃ ┣ (coming soon)
-┗ ...
-
-
 Each section includes:
 - **Summary** – A concise overview of what the section covers  
 - **Key Points** – Simplified explanations with visuals or tables where helpful  
