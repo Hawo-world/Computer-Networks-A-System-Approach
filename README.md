@@ -1,4 +1,4 @@
-# 🧠 Computer Networks: Simplified Notes
+# Computer Networks: Simplified Notes
 *A study companion for*  
 **Computer Networks: A Systems Approach**  
 by Larry Peterson & Bruce Davie  
@@ -40,7 +40,8 @@ Each section includes:
 | Chapter | Title | Description |
 |----------|--------|-------------|
 | **1** | *Foundations of Networking* | Overview of network design goals, stakeholders, scalability, and common services. |
-| **2+** | *(Coming Soon)* | I’ll continue adding notes as I progress through the book. |
+| **2** | *Direct Links* | Explains how data travels across links, from encoding and Ethernet to Wi-Fi, 5G, and software-defined edge networks. |
+| **3+** | *(Coming Soon)* | I’ll continue adding notes as I progress through the book. |
 
 > Each chapter folder contains multiple `.md` files — one for every major section.
 
@@ -52,7 +53,7 @@ These notes represent my own understanding and distillation of the material as I
 
 ---
 
-## 🧩 Study Philosophy
+## Study Philosophy
 - **Understand > Memorize:** Focus on how and why things work.  
 - **Simplify without losing accuracy.**  
 - **Build intuition:** Networking is a system of trade-offs — learning to *reason* about them is the real goal.  
