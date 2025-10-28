@@ -41,7 +41,7 @@ Each section includes:
 |----------|--------|-------------|
 | **1** | *Foundations of Networking* | Overview of network design goals, stakeholders, scalability, and common services. |
 | **2** | *Direct Links* | Explains how data travels across links, from encoding and Ethernet to Wi-Fi, 5G, and software-defined edge networks. |
-| **3** | *(Coming Soon)* | I’ll continue adding notes as I progress through the book. |
+| **3** | *Internetworking* | I’ll continue adding notes as I progress through the book. |
 | **4+** | *(Coming Soon)* | I'll continue adding notes as I progress theough the book. |
 
 > Each chapter folder contains multiple `.md` files — one for every major section.
