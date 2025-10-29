@@ -1,0 +1,182 @@
+# 🧭 3.1 Switching basics
+
+## 🌐 The Role of Switching
+
+A **switch** connects multiple links to form a larger network. It is a **multi-input, multi-output device** that forwards packets from one input to one or more outputs. This enables **star topologies**, where all devices connect through a central switch.
+
+### Advantages of Switch-Based Networks
+
+- **Scalable:** Multiple switches can interconnect to form large networks.  
+- **Efficient:** Each host gets a **dedicated link**, avoiding the contention of shared-media networks (like classic Ethernet).  
+- **Expandable:** Adding new hosts doesn’t degrade performance if the switch has sufficient capacity.  
+
+By contrast, **shared-media networks** (e.g., early Ethernet) force multiple hosts to share bandwidth, limiting throughput.  
+Switching supports **full-speed communication per host**, making it essential for scalability.
+
+---
+
+## 💡 Optical Transport Layer (DWDM & ROADMs)
+
+Beneath packet-switched networks lies an **optical transport layer** that uses **Dense Wavelength Division Multiplexing (DWDM)**.  
+DWDM transmits **multiple wavelengths (“colors”) of light** over a single fiber—often 100+ channels, each carrying up to **100 Gbps**.
+
+- **ROADMs (Reconfigurable Optical Add/Drop Multiplexers):** Optical switches that direct wavelengths across fibers.  
+- A **ROADM network** forms the **optical circuit layer**, while packet networks (Ethernet, IP) ride on top.  
+- ROADMs allow **reconfigurable topologies**, dynamically changing how packet switches are interconnected.  
+
+---
+
+## ⚙️ The Switching Function
+
+A switch receives packets on one link and transmits them on another. It decides **which output port** to use based on identifiers in the **packet header**.
+
+Switching (also called **forwarding**) can occur using three main approaches:
+
+1. **Datagram (Connectionless)**  
+2. **Virtual Circuit (Connection-Oriented)**  
+3. **Source Routing**
+
+Each method differs in **how the forwarding path is determined**.
+
+---
+
+## 📦 3.1.1 Datagram Switching
+
+### Concept
+
+In **datagram networks**, each packet carries the **complete destination address**.  
+Switches forward packets based on a **forwarding (routing) table** mapping destinations to output ports.
+
+### Key Characteristics
+
+- **Connectionless:** No setup phase; packets are forwarded immediately.  
+- **Independent delivery:** Each packet can take a different path.  
+- **Resilient:** Failures can be bypassed dynamically via new routes.  
+- **Unacknowledged delivery:** Sender doesn’t know if the destination is reachable.  
+
+This model is **robust and flexible**, forming the basis of the **Internet Protocol (IP)** and the **Internet’s resilience to failures**.
+
+---
+
+## 🔄 3.1.2 Virtual Circuit Switching (VC)
+
+### Concept
+
+A **Virtual Circuit (VC)** establishes a **logical connection** before data transfer.  
+Switches maintain a **Virtual Circuit Table (VC Table)** describing how packets for that circuit are forwarded.
+
+Each entry specifies:
+
+- Incoming interface and **VCI (Virtual Circuit Identifier)**  
+- Outgoing interface and new **VCI**  
+- VCIs are **link-local** (unique per link only)  
+
+### Types of Virtual Circuits
+
+- **Permanent Virtual Circuit (PVC):** Manually configured; long-lived.  
+- **Switched Virtual Circuit (SVC):** Dynamically set up via **signalling** between hosts and switches.  
+
+### Connection Setup Process
+
+1. Source sends a **setup message** with the destination address.  
+2. Each switch assigns VCIs and creates VC table entries.  
+3. Destination replies with an **acknowledgment** confirming the connection.  
+4. Data transfer begins using short VCIs instead of full addresses.  
+
+When finished, a **teardown message** removes the connection state.
+
+### Key Properties
+
+- **Setup delay:** One RTT before transmission.  
+- **Smaller headers:** Faster lookups.  
+- **Failure sensitivity:** Path breaks require new setup.  
+- **Supports QoS:** Enables bandwidth and latency guarantees.  
+
+### Quality of Service (QoS)
+
+VCs can provide guaranteed performance by:
+
+- Allocating buffer space and bandwidth per circuit.  
+- Running **hop-by-hop flow control** (as in X.25).  
+- Limiting delay and guaranteeing throughput.  
+
+### Real-World Examples
+
+- **X.25**, **Frame Relay**, and **ATM** used VC switching.  
+- Modern equivalents: **MPLS**, **VPNs** over IP.
+
+---
+
+### ⚡ Asynchronous Transfer Mode (ATM)
+
+ATM is a high-speed, connection-oriented network standard from the 1980s–1990s.
+
+#### Key Features
+
+- Uses fixed-size **cells** (53 bytes: 5-byte header + 48-byte payload).  
+- Each cell includes **VPI/VCI identifiers** for hierarchical routing.  
+- Fixed cell size enables **parallel hardware switching**.  
+- Small cells reduce latency for **real-time traffic** (e.g., voice).  
+- Small payloads cause **inefficiency (“cell tax”)** due to overhead.  
+
+ATM’s design influenced modern **hardware switch architectures**.
+
+---
+
+## 🧭 3.1.3 Source Routing
+
+### Concept
+
+In **source routing**, the **sender specifies the full (or partial) path** in the packet header.  
+Each switch reads and updates the header to forward the packet.
+
+### Implementation
+
+- Each output port has a unique number.  
+- The header lists port numbers in order.  
+- Each switch processes one entry, then rotates, strips, or advances a pointer.
+
+### Variants
+
+- **Rotation:** Rotate list after each hop.  
+- **Stripping:** Remove the first entry.  
+- **Pointer:** Advance pointer to the next entry.
+
+### Types of Source Routes
+
+- **Strict Source Route:** Specifies every node.  
+- **Loose Source Route:** Specifies only key waypoints.
+
+### Applications
+
+- Used in **datagram** (IP source routing option) and **VC** networks.  
+- Offers **explicit route control**, requiring topology awareness at the sender.
+
+---
+
+## 🧾 Glossary
+
+| Term | Definition |
+|------|-------------|
+| **Switch** | Device connecting multiple network links, forwarding packets between inputs and outputs. |
+| **Star Topology** | Layout where each device connects to a central switch. |
+| **Shared-Media Network** | Network where all devices share a single transmission medium (e.g., early Ethernet). |
+| **DWDM (Dense Wavelength Division Multiplexing)** | Optical technology sending multiple light wavelengths through one fiber. |
+| **ROADM (Reconfigurable Optical Add/Drop Multiplexer)** | Optical switch directing specific wavelengths, forming flexible paths. |
+| **Forwarding** | Process of moving a packet from input to output based on header info. |
+| **Datagram Switching** | Connectionless model where each packet is routed independently. |
+| **Forwarding Table** | Data structure mapping destinations to output ports. |
+| **Virtual Circuit (VC)** | Logical connection established before data transfer. |
+| **VCI (Virtual Circuit Identifier)** | Short numeric label identifying a VC on a link. |
+| **PVC (Permanent Virtual Circuit)** | Manually configured, long-lived virtual connection. |
+| **SVC (Switched Virtual Circuit)** | Dynamically created connection set up via signalling. |
+| **Signalling** | Exchange of control messages for establishing/removing VCs. |
+| **Hop-by-Hop Flow Control** | Mechanism ensuring each link manages buffer space efficiently. |
+| **QoS (Quality of Service)** | Ability to guarantee performance (bandwidth, latency). |
+| **ATM (Asynchronous Transfer Mode)** | High-speed VC network using 53-byte fixed-size cells. |
+| **VPI (Virtual Path Identifier)** | ATM header field grouping circuits for hierarchy. |
+| **HEC (Header Error Check)** | CRC-8 code in ATM headers for error detection. |
+| **Source Routing** | Technique where the sender specifies the route through the network. |
+| **Strict Source Route** | Route listing every node in sequence. |
+| **Loose Source Route** | Route listing selected nodes (waypoints). |
+| **Cell Tax** | Inefficiency from ATM’s small fixed-size cells and overhead. |
