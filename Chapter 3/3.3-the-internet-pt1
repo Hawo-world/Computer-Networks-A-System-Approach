@@ -1,0 +1,139 @@
+# 🌐 3.3 Part 1 — The Internet (IP): Internetworking Foundations
+
+## 3.3.1 What Is an Internetwork
+
+### 🔹 Main Idea
+
+An **internetwork** (or *internet*, lowercase “i”) is a collection of separate physical networks interconnected to act as one logical network that provides host-to-host communication.
+
+- A **network** = a single technology (e.g., Ethernet, Wi-Fi).  
+- An **internetwork** = multiple networks linked by **routers**.  
+- The **Internet** (capital “I”) = the global public internetwork built on IP.
+
+### 🔹 Key Concepts
+
+- **Routers (Gateways)** interconnect networks with different technologies.  
+- **Logical vs. Physical:** The internet is a *logical* network built on *physical* ones.  
+- **Heterogeneity:** IP allows different hardware and media types to coexist.
+
+### 🔹 L2 vs L3 Networks
+
+- **L2 (Layer 2) Network:** Uses switches/bridges, shares one broadcast domain.  
+- **L3 (Layer 3) Network:** Uses routers and IP, supports different subnets.  
+- Choosing L2 or L3 depends on whether hosts must share a broadcast domain (L2) or belong to separate networks (L3).
+
+---
+
+## 3.3.2 Service Model
+
+### 🔹 Overview
+
+The IP service model defines how data is delivered across an internetwork.
+
+- **Goal:** Provide a simple service that works over *any* underlying network.  
+- **Two main components:**  
+  1. **Addressing scheme** – uniquely identifies hosts.  
+  2. **Datagram delivery** – connectionless, *best effort* transmission.
+
+### 🔹 Best-Effort Service
+
+- No guarantees of delivery, order, or integrity.  
+- Keeps routers simple and scalable.  
+- Reliability is handled by higher layers (e.g., TCP).  
+- IP can “run over anything” — even unconventional media (famously, “carrier pigeons”).
+
+---
+
+## 3.3.3 Datagram Delivery and Packet Format
+
+### 🔹 IP Datagram Structure
+
+Each IP datagram consists of a **Header + Data**.
+
+- The **header** holds control information for routing and delivery.  
+- The design uses **32-bit alignment** for efficiency in software processing.
+
+### 🔹 IPv4 Header Fields (Selected Highlights)
+
+| Field | Function |
+|--------|-----------|
+| **Version** | IP version (IPv4 = 4). |
+| **HLen** | Header length in 32-bit words (usually 20 bytes). |
+| **TOS (Type of Service)** | Indicates priority or QoS hints (delay, throughput). |
+| **Total Length** | Full packet size (max 65,535 bytes). |
+| **Identification, Flags, Fragment Offset** | Used for fragmentation and reassembly. |
+| **TTL (Time to Live)** | Limits hops to prevent routing loops. |
+| **Protocol** | Identifies upper-layer protocol (TCP = 6, UDP = 17). |
+| **Header Checksum** | Detects header corruption. |
+| **SourceAddr / DestinationAddr** | 32-bit IP addresses. |
+| **Options** | Optional, variable-length fields (rarely used). |
+
+---
+
+## 3.3.4 Fragmentation and Reassembly
+
+### 🔹 Why Fragmentation Exists
+
+Different networks have different **MTUs (Maximum Transmission Units)**.
+
+- IP must adapt packet sizes to the smallest MTU on a path.  
+- Routers **fragment** large datagrams; receivers **reassemble** them.
+
+### 🔹 Fragmentation Mechanism
+
+- Each fragment is an independent IP datagram.  
+- All fragments share the same **Identification** value.  
+- **Flags (M bit)** – set if more fragments follow.  
+- **Offset** – indicates the fragment’s data position (in 8-byte units).  
+- **Reassembly** occurs **only at the final destination**, never at routers.
+
+### 🔹 Performance Notes
+
+- Lost fragments → the entire datagram is dropped.  
+- Fragmentation adds overhead; **Path MTU Discovery** helps avoid it.  
+- Fragments are independent and can themselves be re-fragmented.
+
+---
+
+## 3.3.5 Global Addresses (Overview)
+
+*(Introduced here and expanded in Part 2.)*
+
+- Every host/interface needs a **globally unique IP address**.  
+- IP addresses = **Network Part + Host Part**.  
+- Routers have one IP address per interface.  
+- The hierarchical design enables scalable, aggregated routing.
+
+---
+
+## 🌟 Key Takeaways (Part 1)
+
+1. **Internetworking** connects heterogeneous networks via routers.  
+2. **IP Service Model:** best-effort, connectionless datagram delivery.  
+3. **Routers vs Switches:** L3 vs L2—routers isolate broadcast domains for scalability.  
+4. **IPv4 Header:** provides control, addressing, and identification fields.  
+5. **Fragmentation/Reassembly:** solves MTU mismatches but is inefficient.  
+6. **Hierarchical Addressing:** supports scalability and efficient forwarding.
+
+---
+
+## 📘 Glossary (Part 1)
+
+| Term | Definition |
+|------|-------------|
+| **Internetwork (internet)** | A logical network connecting multiple physical networks. |
+| **Internet (capital I)** | The global IP-based internetwork. |
+| **Router** | Connects multiple networks, forwarding packets using IP. |
+| **Bridge / Switch (L2)** | Connects nodes within a broadcast domain using MAC addresses. |
+| **L2 Network** | Layer 2 network (e.g., Ethernet LAN). |
+| **L3 Network** | Layer 3 network (e.g., IP network). |
+| **Service Model** | Defines the host-to-host delivery service of the network. |
+| **Best-Effort Delivery** | No delivery guarantees; packets may be lost, duplicated, or reordered. |
+| **Datagram** | Self-contained packet sent without prior setup. |
+| **MTU (Maximum Transmission Unit)** | Largest packet size supported by a physical network. |
+| **Fragmentation** | Splitting a datagram into smaller packets to fit MTU. |
+| **Reassembly** | Reconstructing the original datagram at the destination. |
+| **TTL (Time to Live)** | Limits a packet’s lifetime to prevent endless routing loops. |
+| **Protocol Field** | Identifies upper-layer protocol (TCP, UDP, ICMP). |
+| **Checksum** | Header error-detection value. |
+| **Network Part / Host Part** | Hierarchical components of an IP address. |
